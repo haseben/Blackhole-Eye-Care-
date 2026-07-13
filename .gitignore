@@ -1,0 +1,22 @@
+# Python temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# PyInstaller build files
+build/
+dist/
+*.spec
+
+# User local configuration files (must not be uploaded, contains user-specific paths/settings)
+.eye_care_assistant.json
+
+# IDE settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
