@@ -87,6 +87,12 @@ tools/generate_demo.py # Offline visual preview generator
 
 Issues and pull requests are welcome. If you change the shader or timing behavior, include a short screen recording or a reproducible test case so the visual and rest-detection behavior can be reviewed.
 
+## Acknowledgements
+
+The black-hole shader in `blackhole.glsl` is adapted from Eric Bruneton's [`black_hole_shader`](https://github.com/ebruneton/black_hole_shader), a real-time black-hole rendering project. The original work is copyright © 2020 Eric Bruneton and licensed under BSD-3-Clause. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the required notice and license text.
+
+The MIT license in this repository applies to Blackhole Eye Care's original code; the adapted shader remains subject to the upstream BSD-3-Clause terms.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
