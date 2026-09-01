@@ -11,7 +11,7 @@ Blackhole Eye Care is a non-intrusive Windows eye-care assistant based on the **
 
 It is deliberately not another notification that you can dismiss without looking up. Put down the mouse and keyboard, rest, and the black hole fades away so the next work interval can begin.
 
-![Blackhole Eye Care visual preview](assets/demo.gif)
+![Blackhole Eye Care visual preview](demo.gif)
 
 ## Download
 
