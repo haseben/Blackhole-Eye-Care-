@@ -1,7 +1,13 @@
 // blackhole.glsl — a geodesic-traced black hole for Ghostty
 //
-// After Eric Bruneton's "Real-time High-Quality Rendering of Non-Rotating
-// Black Holes" (https://ebruneton.github.io/black_hole_shader/). Bruneton
+// This shader is adapted from Eric Bruneton's black_hole_shader:
+// https://github.com/ebruneton/black_hole_shader
+// Original project copyright (c) 2020 Eric Bruneton and licensed under
+// BSD-3-Clause. See THIRD_PARTY_NOTICES.md for the full notice.
+//
+// The adaptation is based on Bruneton's "Real-time High-Quality Rendering of
+// Non-Rotating Black Holes" (https://ebruneton.github.io/black_hole_shader/).
+// Bruneton
 // precomputes Schwarzschild geodesics into lookup textures; a Ghostty custom
 // shader is a single fragment pass with no custom textures, so here each
 // pixel's null geodesic is integrated numerically instead — the Binet-form
@@ -589,3 +595,4 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec3 col = bg * trans + (vec3(1.0) - exp(-emitc * L.expo));
     fragColor = vec4(col, 1.0);
 }
+
