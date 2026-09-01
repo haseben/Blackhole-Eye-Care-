@@ -1,92 +1,95 @@
-# Blackhole Eye Care — 用黑洞吞噬你的屏幕，逼你休息
+# Blackhole Eye Care
 
-一款基于 **20-20-20 护眼法则**的非侵入式 Windows 护眼工具。
+> A beautiful, hard-to-ignore reminder to look away from your screen.
 
-当你连续工作超过设定时间（默认 20 分钟），屏幕上会逐渐生成一个物理精确的**史瓦西黑洞**——它不是简单的弹窗，而是通过 OpenGL 光线追踪着色器，实时渲染引力透镜效应，扭曲、拉伸、吞噬你屏幕上的文字和图像。黑洞会缓慢旋转变大，直到你停下来休息。
+[![Latest release](https://img.shields.io/github/v/release/haseben/Blackhole-Eye-Care-?display_name=tag&sort=semver&color=ffb45f)](https://github.com/haseben/Blackhole-Eye-Care-/releases/latest)
+[![Windows](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows&logoColor=white)](https://github.com/haseben/Blackhole-Eye-Care-/releases/latest)
+[![License](https://img.shields.io/badge/license-MIT-8fd694.svg)](LICENSE)
+[![简体中文](https://img.shields.io/badge/文档-简体中文-8ab4f8)](README.zh-CN.md)
 
----
+Blackhole Eye Care is a non-intrusive Windows eye-care assistant based on the **20-20-20 rule**. After a configurable work interval, a GPU-accelerated black hole gradually bends and consumes the desktop until you take a real break.
 
-## 核心特色
+It is deliberately not another notification that you can dismiss without looking up. Put down the mouse and keyboard, rest, and the black hole fades away so the next work interval can begin.
 
-- **GPU 光线追踪黑洞**：约 590 行 GLSL 着色器，数值积分 Binet 方程实现测地线追踪，包含吸积盘、多普勒频移、引力红移、光子环等真实天体物理效果，支持 8 种视觉风格预设（Inferno / Gargantua / M87* 等）
-- **零打扰交互**：无需任何手动操作，放下鼠标即自动开始休息，纯被动式提醒
-- **极低资源占用**：空闲时 CPU 占用 < 0.1%，黑洞动画基于 OpenGL 硬件加速，稳定 60 FPS
-- **单文件分发**：通过 PyInstaller 打包为单个 exe，双击即用，无外部依赖
+![Blackhole Eye Care visual preview](assets/demo.gif)
 
-## 工作原理
+## Download
 
-程序以系统托盘图标的形式常驻后台，通过操作系统底层钩子（pynput）监听键盘鼠标活动，运行一个三态有限状态机：
+**[Download the latest Windows build](https://github.com/haseben/Blackhole-Eye-Care-/releases/latest)** · [View all releases](https://github.com/haseben/Blackhole-Eye-Care-/releases)
 
+The release page includes a portable, single-file `Blackhole-Eye-Care.exe` and a SHA-256 checksum. Windows may show a SmartScreen warning for a new unsigned open-source binary; verify the checksum before running it.
+
+## What makes it different
+
+- **A visual reminder, not a pop-up** — the effect grows slowly, so the interruption is noticeable without being jarring.
+- **Automatic rest detection** — no “start break” button. The keyboard and mouse monitor detects sustained inactivity and resets the cycle after the configured rest period.
+- **GPU-accelerated rendering** — the OpenGL shader renders gravitational lensing, an accretion disk, Doppler asymmetry, and a photon ring when the graphics driver supports the requested context.
+- **Private by design** — this repository contains no telemetry, account system, or network service. The desktop screenshot is used locally as the overlay texture and is not uploaded.
+
+## How it works
+
+```text
+WORKING ── work interval reached ──▶ REMINDING ── inactivity ──▶ RESTING
+   ▲                                      │                         │
+   └──────────── activity resumes ────────┘                         │
+                              rest complete ────────────────────────┘
 ```
-工作 (WORKING) ──超时──▶ 提醒 (REMINDING) ──停止操作──▶ 休息 (RESTING) ──休息充分──▶ 工作 (WORKING)
-     ▲                        │                              │
-     └────────────────────────┘                              │
-              继续工作（黑洞持续增长）                活动恢复（回退到工作状态）
-```
 
-当检测到用户超时未休息时，全屏透明覆盖层启动，截取当前桌面作为纹理，利用 GPU 着色器渲染黑洞动画。当用户停止操作达到设定时长（默认 20 秒），黑洞自动消散，计时重置。
+The tray application listens for local input with `pynput`. When the work interval is reached, a transparent, click-through overlay captures the current desktop and renders the black-hole shader. Sustained inactivity closes the overlay and starts a fresh work interval.
 
-## 安装与使用
+## Install from source
 
-### 运行编译好的 EXE
-
-在 `dist` 目录下找到 `护眼助手.exe`，双击运行即可。
-
-### 从源码运行
+Requires Windows, Python 3.8+, and a graphics driver capable of the requested OpenGL context.
 
 ```bash
-# 安装依赖
-pip install -r requirements.txt
-
-# 直接运行
+git clone https://github.com/haseben/Blackhole-Eye-Care-.git
+cd Blackhole-Eye-Care-
+python -m pip install -r requirements.txt
 python main.py
+```
 
-# 编译打包
+To build a portable executable locally:
+
+```bash
 python build_exe.py
 ```
 
-编译成功后，生成的单文件绿色版程序保存在 `dist/护眼助手.exe`。
+The output is `dist/Blackhole-Eye-Care.exe`. Tagging a commit with `v*` also runs the included GitHub Actions workflow and publishes the same artifacts to a Release.
 
-### 操作说明
+## Defaults and settings
 
-- **后台托盘**：运行后程序无主窗口，自动最小化至系统托盘（屏幕右下角）
-- **查看进度**：鼠标悬停在托盘图标上，可查看"剩余工作时间"或"连续休息时间"
-- **右键菜单**：查看状态 / 打开设置 / 重置计时 / 退出程序
-- **黑洞消失**：停止操作鼠标和键盘持续达到设定时间（默认 20 秒），黑洞自动消失并重置倒计时
+Right-click the tray icon and choose **Settings**. Values are stored locally in `%USERPROFILE%\\.eye_care_assistant.json`.
 
-## 设置参数
+| Setting | Default | Meaning |
+| --- | ---: | --- |
+| Work interval | 20 minutes | Continuous work before the reminder appears |
+| Rest duration | 20 seconds | Sustained inactivity required to reset the cycle |
+| Idle threshold | 5 seconds | When inactivity starts counting as a break |
+| Maximum black-hole radius | 350 px | Visual size limit |
+| Growth rate | 0.003 | Normalized growth per animation frame |
+| Drift speed | 1.0 | How quickly the effect moves across the screen |
 
-在托盘右键菜单中选择「设置」，可调整以下参数：
+## Project structure
 
-| 参数 | 默认值 | 说明 |
-|------|--------|------|
-| 工作时长 | 20 分钟 | 连续工作的时长上限 |
-| 休息时长 | 20 秒 | 判定为彻底休息所需的静止时间 |
-| 判定空闲时间 | 5 秒 | 多久无操作算作"开始休息" |
-| 黑洞最大半径 | 350 px | 黑洞能长到的最大尺寸 |
-| 黑洞生长速度 | 0.8 px/帧 | 黑洞每帧变大的像素数 |
-| 黑洞漂移速度 | 1.0 | 黑洞在屏幕上的漂移速率 |
-
-## 项目结构
-
-```
-护眼助手/
-├── main.py              # 入口：组件装配与启动
-├── black_hole.py        # 黑洞渲染：OpenGL 全屏覆盖层
-├── blackhole.glsl       # GLSL 着色器：光线追踪 + 吸积盘 + 引力透镜
-├── timer_manager.py     # 核心逻辑：三态有限状态机
-├── input_monitor.py     # 输入监听：键鼠活动检测（pynput）
-├── tray_icon.py         # 系统托盘：图标、菜单、设置面板
-├── config.py            # 配置管理：JSON 持久化存储
-├── build_exe.py         # 打包脚本：PyInstaller 单文件编译
-├── requirements.txt     # Python 依赖
-└── README.md
+```text
+main.py                # Application entry point and component wiring
+black_hole.py          # Transparent OpenGL overlay and animation loop
+blackhole.glsl         # Gravitational-lensing fragment shader
+timer_manager.py       # WORKING / REMINDING / RESTING state machine
+input_monitor.py       # Local keyboard and mouse activity monitor
+tray_icon.py           # System tray menu and settings dialog
+config.py              # JSON configuration persistence
+build_exe.py           # PyInstaller build script
+tools/generate_demo.py # Offline visual preview generator
 ```
 
-## 技术栈
+## Contributing
 
-**Python 3.8+** / **PyQt6** / **OpenGL 2.1** / **pynput** / **GLSL 330**
+Issues and pull requests are welcome. If you change the shader or timing behavior, include a short screen recording or a reproducible test case so the visual and rest-detection behavior can be reviewed.
 
-## 许可证
+## License
 
-MIT License
+MIT — see [LICENSE](LICENSE).
+
+简体中文文档：[README.zh-CN.md](README.zh-CN.md)
+

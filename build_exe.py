@@ -1,9 +1,16 @@
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 def build():
-    print("开始打包 '护眼助手' 为单文件 EXE...")
+    """Build a self-contained Windows executable.
+
+    The shader is shipped as data so the packaged application keeps the same
+    visual effect as a source checkout.  The runtime also contains an inline
+    fallback, but bundling the file makes future shader updates predictable.
+    """
+    print("Building Blackhole Eye Care as a single-file Windows executable...")
     
     # 确保依赖项安装
     try:
@@ -14,18 +21,25 @@ def build():
 
     import PyInstaller.__main__
     
-    # 打包参数
+    project_dir = Path(__file__).resolve().parent
+    shader_path = project_dir / "blackhole.glsl"
+    if not shader_path.exists():
+        raise FileNotFoundError(f"Missing shader file: {shader_path}")
+
+    # PyInstaller uses ';' as the data-file separator on Windows.
     params = [
-        'main.py',
-        '--onefile',            # 打包成单个可执行文件
-        '--noconsole',          # 不显示控制台黑窗口
-        '--name=护眼助手',       # 生成的可执行文件名
-        '--clean',              # 清理 PyInstaller 缓存
+        str(project_dir / "main.py"),
+        "--onefile",
+        "--noconsole",
+        "--name=Blackhole-Eye-Care",
+        "--clean",
+        f"--add-data={shader_path}{os.pathsep}.",
     ]
     
     # 在 Windows 下运行打包
     PyInstaller.__main__.run(params)
-    print("打包完成！请在 'dist' 文件夹中查找 '护眼助手.exe'。")
+    print("Build complete. Find the executable in dist/Blackhole-Eye-Care.exe.")
 
 if __name__ == "__main__":
     build()
+
