@@ -11,7 +11,7 @@ Blackhole Eye Care 是一款基于 **20-20-20 护眼法则**的 Windows 护眼�
 
 它不是一个可以顺手关闭的弹窗：放下鼠标和键盘，持续休息，黑洞才会消失，并自动开始下一轮工作计时。
 
-![Blackhole Eye Care 视觉预览](assets/demo.gif)
+![Blackhole Eye Care 视觉预览](demo.gif)
 
 ## 下载
 
