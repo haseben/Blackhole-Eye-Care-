@@ -87,6 +87,12 @@ tools/generate_demo.py # 离线视觉预览生成器
 
 欢迎提交 Issue 和 Pull Request。修改着色器或计时逻辑时，请附上简短录屏或可复现步骤，方便审查视觉效果和休息识别行为。
 
+## 第三方致谢
+
+`blackhole.glsl` 中的黑洞着色器改编自 Eric Bruneton 的 [`black_hole_shader`](https://github.com/ebruneton/black_hole_shader)，这是一个实时黑洞渲染项目。原始作品版权归 Eric Bruneton（© 2020）所有，采用 BSD-3-Clause 许可证。完整的来源声明和许可证文本见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
+
+本仓库的 MIT 许可证仅适用于 Blackhole Eye Care 自有代码；改编后的着色器仍需遵守上游 BSD-3-Clause 条款。
+
 ## 许可证
 
 MIT，详见 [LICENSE](LICENSE)。
