@@ -40,4 +40,5 @@ jobs:
           files: |
             dist/Blackhole-Eye-Care.exe
             dist/SHA256SUMS.txt
+            THIRD_PARTY_NOTICES.md
 
